@@ -22,6 +22,50 @@ This is a monorepo for our project, managed with pnpm workspaces.
 - Shared configurations for ESLint, Prettier, and TypeScript are located in the root of the repository.
 - A pre-commit hook is set up with Husky and lint-staged to automatically lint and format your code before committing.
 
+## Local Infrastructure
+
+This project uses Docker Compose to manage local infrastructure services.
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+
+### Services
+
+- **Backend**: Node.js API
+- **Frontend**: Web application
+- **PostgreSQL**: Database
+- **Redis**: In-memory data store
+- **MinIO**: S3-compatible object storage
+
+### Getting Started
+
+1. **Build and start all services**:
+   ```sh
+   make dev
+   ```
+
+2. **Stop all services**:
+   ```sh
+   make stop
+   ```
+
+3. **View logs**:
+   ```sh
+   make logs
+   ```
+
+### Credentials (for local development)
+
+- **PostgreSQL**:
+  - User: `postgres`
+  - Password: `postgres`
+  - Database: `postgres`
+- **MinIO**:
+  - Access Key: `minio`
+  - Secret Key: `minio`
+
 ## Contributing
 
 1. Create a new branch for your feature or bug fix.
