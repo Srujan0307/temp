@@ -5,7 +5,9 @@
     "build": "pnpm -r build",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
+    "test:backend": "pnpm --filter backend test",
     "format": "prettier --write .",
+    "dev:backend": "pnpm --filter backend start:dev",
     "prepare": "husky"
   },
   "devDependencies": {
