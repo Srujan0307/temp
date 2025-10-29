@@ -17,13 +17,22 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db:migrate:make": "knex migrate:make -x ts --knexfile knexfile.ts",
+    "db:migrate:latest": "knex migrate:latest --knexfile knexfile.ts --require ts-node/register",
+    "db:migrate:rollback": "knex migrate:rollback --knexfile knexfile.ts --require ts-node/register",
+    "db:seed:make": "knex seed:make -x ts --knexfile knexfile.ts",
+    "db:seed:run": "knex seed:run --knexfile knexfile.ts --require ts-node/register"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@types/pg": "^8.15.6",
+    "knex": "^3.1.0",
+    "nestjs-knex": "^3.0.0",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
@@ -42,7 +51,7 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
   },
