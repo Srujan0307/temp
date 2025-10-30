@@ -5,6 +5,11 @@ import { ContextMiddleware } from './common/middleware/context.middleware';
 import { ContextModule } from './common/context/context.module';
 import { LoggerModule } from 'nestjs-pino';
 import { ContextService } from './common/context/context.service';
+import { APP_GUARD } from '@nestjs/core';
+import { TenancyModule } from 'apps/backend/tenancy/tenancy.module';
+import { TenancyGuard } from 'apps/backend/tenancy/tenancy.guard';
+import { TenancyMiddleware } from 'apps/backend/tenancy/tenancy.middleware';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -28,12 +33,19 @@ import { ContextService } from './common/context/context.service';
         },
       }),
     }),
+    TenancyModule,
+    DatabaseModule,
   ],
   controllers: [HealthController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: TenancyGuard,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(ContextMiddleware).forRoutes('*');
+    consumer.apply(ContextMiddleware, TenancyMiddleware).forRoutes('*');
   }
 }
