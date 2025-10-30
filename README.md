@@ -22,6 +22,28 @@ This is a monorepo for our project, managed with pnpm workspaces.
 - Shared configurations for ESLint, Prettier, and TypeScript are located in the root of the repository.
 - A pre-commit hook is set up with Husky and lint-staged to automatically lint and format your code before committing.
 
+## Database Seeding
+
+Development fixtures are available to help you iterate quickly against a populated tenancy-aware database.
+
+1. Ensure PostgreSQL is running and the connection variables in `.env` point at your development database.
+2. Apply the latest migrations: `pnpm --filter backend db:migrate`.
+3. Seed sample data: `pnpm db:seed`.
+
+The seeding command truncates application tables and reloads the fixtures, so re-running it is a quick way to reset the development database. The root `Makefile` exposes `make db-seed` and `make db-seed-reset` shortcuts for the same workflow.
+
+### Sample Accounts
+
+| Tenant | Role | Email | Password |
+| --- | --- | --- | --- |
+| Acme Logistics | Admin | alice.admin@acme.test | Password123! |
+| Acme Logistics | Manager | mark.manager@acme.test | Password123! |
+| Acme Logistics | Specialist | sophie.specialist@acme.test | Password123! |
+| Beta Transport | Admin | brian.boss@beta.test | Password123! |
+| Beta Transport | Manager | kelly.coordinator@beta.test | Password123! |
+| Beta Transport | Specialist | oscar.operator@beta.test | Password123! |
+| Beta Transport | Auditor | abby.auditor@beta.test | Password123! |
+
 ## Contributing
 
 1. Create a new branch for your feature or bug fix.

@@ -23,6 +23,9 @@ const config: { [key: string]: Knex.Config } = {
       directory: './src/database/migrations',
       tableName: 'knex_migrations',
     },
+    seeds: {
+      directory: './src/database/seeds',
+    },
     ...knexSnakeCaseMappers(),
   },
   production: {
@@ -41,6 +44,9 @@ const config: { [key: string]: Knex.Config } = {
     migrations: {
       directory: './src/database/migrations',
       tableName: 'knex_migrations',
+    },
+    seeds: {
+      directory: './src/database/seeds',
     },
     ...knexSnakeCaseMappers(),
   },
