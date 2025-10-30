@@ -1,9 +1,14 @@
-import { Module, Global } from '@nestjs/common';
-import { databaseProvider } from './database.provider';
 
-@Global()
+import { Module } from '@nestjs/common';
+import { KnexModule } from 'nest-knexjs';
+import config from '../../knexfile';
+
 @Module({
-  providers: [...databaseProvider],
-  exports: [...databaseProvider],
+  imports: [
+    KnexModule.forRoot({
+      config: config.development,
+    }),
+  ],
+  exports: [KnexModule],
 })
 export class DatabaseModule {}

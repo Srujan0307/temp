@@ -13,6 +13,8 @@ import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ClientsModule } from './clients/clients.module';
+import { DocumentsModule } from './documents/documents.module';
+import { FilingsModule } from './filings/filings.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { ClientsModule } from './clients/clients.module';
     AuthModule,
     UsersModule,
     ClientsModule,
+    DocumentsModule,
+    FilingsModule,
   ],
   controllers: [HealthController],
   providers: [
