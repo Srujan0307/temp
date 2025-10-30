@@ -6,10 +6,12 @@ import { ContextModule } from './common/context/context.module';
 import { LoggerModule } from 'nestjs-pino';
 import { ContextService } from './common/context/context.service';
 import { APP_GUARD } from '@nestjs/core';
-import { TenancyModule } from 'apps/backend/tenancy/tenancy.module';
-import { TenancyGuard } from 'apps/backend/tenancy/tenancy.guard';
-import { TenancyMiddleware } from 'apps/backend/tenancy/tenancy.middleware';
+import { TenancyModule } from './tenancy/tenancy.module';
+import { TenancyGuard } from './tenancy/tenancy.guard';
+import { TenancyMiddleware } from './tenancy/tenancy.middleware';
 import { DatabaseModule } from './database/database.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { DatabaseModule } from './database/database.module';
     }),
     TenancyModule,
     DatabaseModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [HealthController],
   providers: [
