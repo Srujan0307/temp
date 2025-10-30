@@ -1,14 +1,19 @@
-# Dockerfile for the frontend application
-FROM node:18-alpine
+# Frontend development Dockerfile
+FROM node:20-alpine AS base
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package*.json ./
-COPY pnpm-lock.yaml ./
+RUN corepack enable
 
-RUN npm install -g pnpm
-RUN pnpm install --prod
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY apps/frontend/package.json ./apps/frontend/
+
+RUN pnpm install --filter frontend... --frozen-lockfile
 
 COPY . .
 
-CMD ["pnpm", "start"]
+RUN pnpm --filter frontend build
+
+EXPOSE 5173
+
+CMD ["pnpm", "--filter", "frontend", "dev", "--", "--host", "0.0.0.0"]
