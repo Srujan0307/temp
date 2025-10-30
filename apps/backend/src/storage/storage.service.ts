@@ -5,11 +5,12 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import * as ClamScan from 'clamscan';
 import { Readable } from 'stream';
 import { v4 as uuidv4 } from 'uuid';
+import { Knex } from 'knex';
+import { InjectModel } from 'nest-knexjs';
 
 import storageConfig from './storage.config';
 import clamavConfig from './clamav.config';
 import { FileObject, FileStatus } from './entities/file-object.entity';
-import { ModelClass } from 'objection';
 
 @Injectable()
 export class StorageService {
@@ -22,8 +23,8 @@ export class StorageService {
     private readonly storageConf: ConfigType<typeof storageConfig>,
     @Inject(clamavConfig.KEY)
     private readonly clamavConf: ConfigType<typeof clamavConfig>,
-    @Inject('FileObjectModel')
-    private readonly fileObjectModel: ModelClass<FileObject>,
+    @InjectModel()
+    private readonly knex: Knex,
   ) {
     this.s3Client = new S3Client({
       region: this.storageConf.region,
@@ -62,15 +63,15 @@ export class StorageService {
 
     const s3Key = this.generateS3Key(tenantId, file.originalname, clientId);
 
-    const fileObject = await this.fileObjectModel.query().insert({
-      fileName: file.originalname,
-      s3Key,
-      mimeType: file.mimetype,
+    const [fileObject] = await this.knex('file_objects').insert({
+      file_name: file.originalname,
+      s3_key: s3Key,
+      mime_type: file.mimetype,
       size: file.size,
-      status: FileStatus.PENDING_SCAN,
-      tenantId,
-      clientId,
-    });
+      status: 'pending_scan',
+      tenant_id: tenantId,
+      client_id: clientId,
+    }).returning('*');
 
     try {
       await this.uploadToS3(s3Key, file.buffer);
@@ -78,16 +79,16 @@ export class StorageService {
 
       if (scanResult.isInfected) {
         this.logger.warn(`File ${s3Key} is infected with ${scanResult.viruses.join(', ')}`);
-        const quarantinedS3Key = this.quarantineFile(s3Key);
-        return await this.updateFileStatus(fileObject.id, FileStatus.QUARANTINED);
+        this.quarantineFile(s3Key);
+        return await this.updateFileStatus(fileObject.id, 'quarantined');
       } else {
         this.logger.log(`File ${s3Key} is clean`);
-        return await this.updateFileStatus(fileObject.id, FileStatus.CLEAN);
+        return await this.updateFileStatus(fileObject.id, 'clean');
       }
     } catch (error) {
       this.logger.error('Error processing file upload', error);
       await this.deleteFromS3(s3Key);
-      await this.fileObjectModel.query().deleteById(fileObject.id);
+      await this.knex('file_objects').where({ id: fileObject.id }).delete();
       throw new InternalServerErrorException('File upload processing failed');
     }
   }
@@ -144,7 +145,11 @@ export class StorageService {
     id: number,
     status: FileStatus,
   ): Promise<FileObject> {
-    return await this.fileObjectModel.query().patchAndFetchById(id, { status });
+    const [fileObject] = await this.knex('file_objects')
+      .where({ id })
+      .update({ status })
+      .returning('*');
+    return fileObject;
   }
 
   private quarantineFile(s3Key: string): string {
@@ -172,16 +177,16 @@ export class StorageService {
   }
 
   async delete(id: number): Promise<void> {
-    const fileObject = await this.fileObjectModel.query().findById(id);
+    const fileObject = await this.getFileObject(id);
     if (!fileObject) {
       throw new BadRequestException('File not found');
     }
-    await this.deleteFromS3(fileObject.s3Key);
-    await this.fileObjectModel.query().deleteById(id);
+    await this.deleteFromS3(fileObject.s3_key);
+    await this.knex('file_objects').where({ id }).delete();
   }
 
   async getFileObject(id: number): Promise<FileObject> {
-    const fileObject = await this.fileObjectModel.query().findById(id);
+    const fileObject = await this.knex('file_objects').where({ id }).first();
     if (!fileObject) {
       throw new BadRequestException('File not found');
     }
