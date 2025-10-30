@@ -12,6 +12,7 @@ import { TenancyMiddleware } from './tenancy/tenancy.middleware';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { ClientsModule } from './clients/clients.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { UsersModule } from './users/users.module';
     DatabaseModule,
     AuthModule,
     UsersModule,
+    ClientsModule,
   ],
   controllers: [HealthController],
   providers: [
