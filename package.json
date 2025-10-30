@@ -11,13 +11,14 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "typescript": "^5.0.0",
-    "eslint": "^8.0.0",
-    "prettier": "^3.0.0",
-    "husky": "^9.0.0",
-    "lint-staged": "^15.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0"
+    "eslint": "^8.0.0",
+    "husky": "^9.0.0",
+    "knex": "^3.1.0",
+    "lint-staged": "^15.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.0.0"
   },
   "packageManager": "pnpm@9.1.0",
   "lint-staged": {
