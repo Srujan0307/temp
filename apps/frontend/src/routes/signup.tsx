@@ -1,32 +1,25 @@
+
 import { FormEvent, useState } from 'react';
-import { useLocation, useNavigate, type Location } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/features/auth/use-auth';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { login as loginService } from '@/features/auth/services/authService'; // Assuming you have this service
+import { register as registerService } from '@/features/auth/services/authService';
 import { useMutation } from '@tanstack/react-query';
 
-export const LoginRoute = () => {
+export const SignupRoute = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const { mutate, isPending } = useMutation({
-    mutationFn: () => loginService({ email, password }),
-    onSuccess: (data) => {
-      login(data.token, data.refreshToken);
-      const redirectPath =
-        (location.state as { from?: Location } | undefined)?.from?.pathname ??
-        '/';
-      navigate(redirectPath, { replace: true });
+    mutationFn: () => registerService({ email, password }),
+    onSuccess: () => {
+      navigate('/login');
     },
     onError: (error) => {
-      console.error('Login failed:', error);
-      // You can add user-facing error handling here
+      console.error('Signup failed:', error);
     },
   });
 
@@ -39,8 +32,8 @@ export const LoginRoute = () => {
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>Enter your credentials to access your account.</CardDescription>
+          <CardTitle>Sign Up</CardTitle>
+          <CardDescription>Enter your details to create an account.</CardDescription>
         </CardHeader>
         <CardContent>
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -65,7 +58,7 @@ export const LoginRoute = () => {
               />
             </div>
             <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending ? 'Signing in...' : 'Sign in'}
+              {isPending ? 'Signing up...' : 'Sign up'}
             </Button>
           </form>
         </CardContent>
