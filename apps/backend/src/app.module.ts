@@ -15,6 +15,8 @@ import { UsersModule } from './users/users.module';
 import { ClientsModule } from './clients/clients.module';
 import { DocumentsModule } from './documents/documents.module';
 import { FilingsModule } from './filings/filings.module';
+import { VehiclesModule } from './vehicles/vehicles.module';
+import { CalendarModule } from './calendar/calendar.module';
 
 @Module({
   imports: [
@@ -45,6 +47,8 @@ import { FilingsModule } from './filings/filings.module';
     ClientsModule,
     DocumentsModule,
     FilingsModule,
+    VehiclesModule,
+    CalendarModule,
   ],
   controllers: [HealthController],
   providers: [
