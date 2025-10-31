@@ -1,3 +1,4 @@
+import { AppGateway } from './app.gateway';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { HealthController } from './health/health.controller';
 import { ConfigModule } from '@nestjs/config';
@@ -52,6 +53,7 @@ import { CalendarModule } from './calendar/calendar.module';
   ],
   controllers: [HealthController],
   providers: [
+    AppGateway,
     {
       provide: APP_GUARD,
       useClass: TenancyGuard,

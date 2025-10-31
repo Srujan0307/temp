@@ -3,17 +3,21 @@ import { KNEX_CONNECTION } from 'nest-knexjs';
 import { Knex } from 'knex';
 import { Filing } from './filing.entity';
 import { SlaService } from './sla.service';
+import { FilingsGateway } from './filings.gateway';
 
 @Injectable()
 export class FilingsService {
   constructor(
     @Inject(KNEX_CONNECTION) private readonly knex: Knex,
     private readonly slaService: SlaService,
+    private readonly filingsGateway: FilingsGateway,
   ) {}
 
   async create(filing: Partial<Filing>): Promise<Filing> {
     const [newFiling] = await this.knex('filings').insert(filing).returning('*');
-    return this.slaService.updateSlaStatus(newFiling);
+    const filingWithSla = await this.slaService.updateSlaStatus(newFiling);
+    this.filingsGateway.server.emit('filing.created', filingWithSla);
+    return filingWithSla;
   }
 
   async findAll(): Promise<Filing[]> {
@@ -29,10 +33,13 @@ export class FilingsService {
       .where({ id })
       .update(filing)
       .returning('*');
-    return this.slaService.updateSlaStatus(updatedFiling);
+    const filingWithSla = await this.slaService.updateSlaStatus(updatedFiling);
+    this.filingsGateway.server.emit('filing.updated', filingWithSla);
+    return filingWithSla;
   }
 
   async remove(id: number): Promise<void> {
     await this.knex('filings').where({ id }).del();
+    this.filingsGateway.server.emit('filing.removed', { id });
   }
 }

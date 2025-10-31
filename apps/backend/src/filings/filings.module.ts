@@ -8,8 +8,16 @@ import { KanbanController } from './kanban.controller';
 import { KanbanService } from './kanban.service';
 import { SlaService } from './sla.service';
 
+import { FilingsGateway } from './filings.gateway';
+
 @Module({
   controllers: [FilingsController, FilingStageController, KanbanController],
-  providers: [FilingsService, FilingStageService, KanbanService, SlaService],
+  providers: [
+    FilingsService,
+    FilingStageService,
+    KanbanService,
+    SlaService,
+    FilingsGateway,
+  ],
 })
 export class FilingsModule {}
