@@ -52,7 +52,7 @@ export class UsersController {
   @Get(':id')
   @Roles('admin')
   findOne(@Param('id') id: string) {
-    return this.usersService.findOneById(+id);
+    return this.usersService.findById(+id);
   }
 
   @Patch(':id')

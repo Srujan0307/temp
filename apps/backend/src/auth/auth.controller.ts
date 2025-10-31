@@ -5,6 +5,7 @@ import { LoginDto } from './dto/login.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { Request as ExpressRequest } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -22,13 +23,13 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('logout')
-  async logout(@Request() req) {
-    return this.authService.logout(req.user.id);
+  async logout(@Request() req: ExpressRequest) {
+    return this.authService.logout((req.user as any).id);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch('password')
-  async changePassword(@Request() req, @Body() changePasswordDto: ChangePasswordDto) {
-    return this.authService.changePassword(req.user.id, changePasswordDto);
+  async changePassword(@Request() req: ExpressRequest, @Body() changePasswordDto: ChangePasswordDto) {
+    return this.authService.changePassword((req.user as any).id, changePasswordDto);
   }
 }

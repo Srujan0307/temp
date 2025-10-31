@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
-import { TenancyService } from '../tenancy/tenancy.service';
+import { TenantService } from '../tenancy/tenancy.service';
 import { User } from '../users/user.entity';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { RefreshToken } from './entities/refresh-token.entity';
@@ -17,17 +17,17 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly usersService: UsersService,
-    private readonly tenancyService: TenancyService,
+    private readonly tenancyService: TenantService,
     @Inject('RefreshTokenModel') private refreshTokenModel: ModelClass<RefreshToken>,
   ) {}
 
   async login(email: string, pass: string): Promise<any> {
-    const tenantId = this.tenancyService.getTenantId();
-    if (!tenantId) {
+    const tenant = this.tenancyService.getTenant();
+    if (!tenant) {
       throw new BadRequestException('Tenant not found');
     }
 
-    const user = await this.usersService.findOne(email, tenantId);
+    const user = await this.usersService.findOne(email, tenant.id);
     if (!user || !bcrypt.compareSync(pass, user.password)) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -94,8 +94,8 @@ export class AuthService {
     await this.refreshTokenModel.query().insert({
       token,
       userId,
-      expiresAt,
-    });
+      expiresAt: expiresAt.toISOString(),
+    } as any);
     
     if (oldRefreshToken) {
       const parent = await this.refreshTokenModel.query().findOne({ token: oldRefreshToken });

@@ -1,5 +1,5 @@
 import { Module, Global } from '@nestjs/common';
-import { TenancyService } from './tenancy.service';
+import { TenantService } from './tenancy.service';
 import { TenantController } from './tenant.controller';
 import { TenancyGuard } from './tenancy.guard';
 import { TenancyMiddleware } from './tenancy.middleware';
@@ -10,7 +10,7 @@ import { LoggingModule } from '../common/logging/logging.module';
 @Module({
   imports: [DatabaseModule, LoggingModule],
   controllers: [TenantController],
-  providers: [TenancyService, TenancyGuard, TenancyMiddleware],
-  exports: [TenancyService, TenancyMiddleware],
+  providers: [TenantService, TenancyGuard, TenancyMiddleware],
+  exports: [TenantService, TenancyMiddleware],
 })
 export class TenancyModule {}

@@ -1,5 +1,5 @@
 
-import * as request from 'supertest';
+import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { createTestApp, clearDatabase, getKnex } from './test-utils';
 import * as bcrypt from 'bcrypt';

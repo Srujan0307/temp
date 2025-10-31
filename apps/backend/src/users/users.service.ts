@@ -29,11 +29,11 @@ export class UsersService {
     return this.userModel.query();
   }
 
-  async findOneByEmail(email: string, tenantId: number): Promise<User | undefined> {
+  async findOne(email: string, tenantId: number): Promise<User | undefined> {
     return this.userModel.query().where({ email, tenantId }).first();
   }
 
-  async findOneById(id: number): Promise<User | undefined> {
+  async findById(id: number): Promise<User | undefined> {
     return this.userModel.query().findById(id);
   }
 

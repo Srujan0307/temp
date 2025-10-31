@@ -3,16 +3,16 @@ import { Injectable, Scope } from '@nestjs/common';
 
 @Injectable({ scope: Scope.REQUEST })
 export class ContextService {
-  private _tenantId: string;
-  private _userId: string;
-  private _correlationId: string;
+  private _tenantId: string | undefined;
+  private _userId: string | undefined;
+  private _correlationId: string | undefined;
 
   set tenantId(tenantId: string) {
     this._tenantId = tenantId;
   }
 
   get tenantId(): string {
-    return this._tenantId;
+    return this._tenantId!;
   }
 
   set userId(userId: string) {
@@ -20,7 +20,7 @@ export class ContextService {
   }
 
   get userId(): string {
-    return this._userId;
+    return this._userId!;
   }
 
   set correlationId(correlationId: string) {
@@ -28,6 +28,6 @@ export class ContextService {
   }
 
   get correlationId(): string {
-    return this._correlationId;
+    return this._correlationId!;
   }
 }
