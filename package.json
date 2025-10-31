@@ -1,46 +1,29 @@
 {
-  "name": "monorepo",
+  "name": "client-portal",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "build": "pnpm -r build",
-    "test": "pnpm -r test",
-    "lint": "pnpm -r lint",
-    "test:backend": "pnpm --filter backend test",
-    "format": "prettier --write .",
-    "dev:backend": "pnpm --filter backend start:dev",
-    "db:seed": "pnpm --filter backend db:seed",
-    "prepare": "husky"
-  },
-  "devDependencies": {
-    "@golevelup/ts-jest": "^0.7.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
-    "eslint": "^8.0.0",
-    "husky": "^9.0.0",
-    "knex": "^3.1.0",
-    "lint-staged": "^15.0.0",
-    "prettier": "^3.0.0",
-    "typescript": "^5.0.0"
-  },
-  "packageManager": "pnpm@9.1.0",
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.15",
-    "@radix-ui/react-tooltip": "^1.2.8",
-    "dotenv": "^17.2.3",
-    "nest-knexjs": "^0.0.28",
-    "nestjs-pino": "^4.4.1",
-    "objection": "^3.1.5",
-    "pg": "^8.16.3",
-    "pino-http": "^10.5.0",
-    "pino-pretty": "^13.1.2",
-    "react-error-boundary": "^6.0.0",
-    "sonner": "^2.0.7",
-    "ts-node": "^10.9.2"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.23.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
   }
 }
