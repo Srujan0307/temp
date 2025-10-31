@@ -1,0 +1,21 @@
+# This is a placeholder for the Helm deployment.
+# The actual deployment will be added in a future update.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: my-app
+          image: "my-app:{{ .Chart.AppVersion }}"
+          ports:
+            - containerPort: 80

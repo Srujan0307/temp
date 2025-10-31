@@ -1,0 +1,4 @@
+# This is a placeholder for the Helm values.
+# The actual values will be added in a future update.
+
+replicaCount: 1
