@@ -1,10 +1,11 @@
-import * as request from 'supertest';
+import request from 'supertest';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { Knex } from 'knex';
 import { User } from '../src/users/user.entity';
 import { sign } from 'jsonwebtoken';
+import { ConfigModule } from '@nestjs/config';
 
 describe('Users', () => {
   let app: INestApplication;
@@ -16,7 +17,12 @@ describe('Users', () => {
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [
+        AppModule,
+        ConfigModule.forRoot({
+          envFilePath: '.env.test',
+        }),
+      ],
     }).compile();
 
     app = moduleRef.createNestApplication();
@@ -24,25 +30,25 @@ describe('Users', () => {
     await app.init();
 
     // Create a tenant
-    const [tenantId] = await knex('tenants').insert({ name: 'test-tenant' }).returning('id');
+    const [tenant] = await knex('tenants').insert({ name: 'test-tenant' }).returning('*');
 
     // Create users
-    [adminUser] = await knex('users').insert({ email: 'admin@test.com', password: 'password', tenantId, firstName: 'Admin', lastName: 'User' }).returning('*');
-    [normalUser] = await knex('users').insert({ email: 'user@test.com', password: 'password', tenantId, firstName: 'Normal', lastName: 'User' }).returning('*');
+    [adminUser] = await knex('users').insert({ email: 'admin@test.com', password: 'password', tenant_id: tenant.id, firstName: 'Admin', lastName: 'User' }).returning('*');
+    [normalUser] = await knex('users').insert({ email: 'user@test.com', password: 'password', tenant_id: tenant.id, firstName: 'Normal', lastName: 'User' }).returning('*');
 
     // Assign roles
-    await knex('user_roles').insert({ userId: adminUser.id, role: 'admin' });
+    await knex('user_roles').insert({ user_id: adminUser.id, role: 'admin' });
 
     // Generate tokens
-    adminToken = sign({ id: adminUser.id, email: adminUser.email, tenantId }, process.env.JWT_SECRET);
-    normalUserToken = sign({ id: normalUser.id, email: normalUser.email, tenantId }, process.env.JWT_SECRET);
+    adminToken = sign({ id: adminUser.id, email: adminUser.email, tenantId: tenant.id }, process.env.JWT_SECRET!);
+    normalUserToken = sign({ id: normalUser.id, email: normalUser.email, tenantId: tenant.id }, process.env.JWT_SECRET!);
   });
 
   afterAll(async () => {
     await knex.destroy();
     await app.close();
   });
-
+  
   describe('GET /users', () => {
     it('should return 401 Unauthorized when no token is provided', () => {
       return request(app.getHttpServer()).get('/users').expect(401);

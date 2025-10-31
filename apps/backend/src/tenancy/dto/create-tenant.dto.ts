@@ -9,4 +9,9 @@ export class CreateTenantDto {
   @IsString()
   @IsOptional()
   domain?: string;
+
+  constructor(name: string, domain?: string) {
+    this.name = name;
+    this.domain = domain;
+  }
 }
