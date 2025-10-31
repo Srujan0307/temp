@@ -14,6 +14,7 @@ import { SignupRoute } from '@/routes/signup';
 import { ForgotPasswordRoute } from '@/routes/forgot-password';
 import { ResetPasswordRoute } from '@/routes/reset-password';
 import { ProfileRoute } from '@/routes/profile';
+import { FilingDetailRoute } from '@/routes/filing-detail';
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -37,6 +38,7 @@ export const router = createBrowserRouter(
           <Route path="/billing" element={<Placeholder title="Billing" />} />
           <Route path="/clients" element={<Placeholder title="Clients" />} />
           <Route path="/filings" element={<Placeholder title="Filings" />} />
+          <Route path="/filings/:filingId" element={<FilingDetailRoute />} />
           <Route path="/calendar" element={<Placeholder title="Calendar" />} />
           <Route path="/users" element={<Placeholder title="Users" />} />
           <Route path="/settings" element={<Placeholder title="Settings" />} />
