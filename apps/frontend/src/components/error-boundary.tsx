@@ -20,12 +20,8 @@ function ErrorFallback() {
 }
 
 export function ErrorBoundary({ children }: { children: React.ReactNode }) {
-  const onError = (error: Error) => {
-    toast.error(error.message);
-  };
-
   return (
-    <ReactErrorBoundary FallbackComponent={ErrorFallback} onError={onError}>
+    <ReactErrorBoundary FallbackComponent={ErrorFallback}>
       {children}
     </ReactErrorBoundary>
   );

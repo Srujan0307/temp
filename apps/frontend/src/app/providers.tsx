@@ -1,9 +1,8 @@
 import { PropsWithChildren, useState } from 'react';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Toaster } from 'sonner';
 
-import { AuthProvider } from '@/features/auth/auth-provider';
+import { AuthProvider } from '@/features/auth/auth-context';
 import { createAppQueryClient } from '@/lib/query-client';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { ErrorBoundary } from '@/components/error-boundary';
@@ -17,8 +16,7 @@ export const AppProviders = ({ children }: PropsWithChildren) => {
         <AuthProvider>
           <QueryClientProvider client={queryClient}>
             {children}
-            <Toaster />
-            {import.meta.env.DEV ? (
+            {import.meta.env.DEV && !import.meta.env.VITEST_WORKER_ID ? (
               <ReactQueryDevtools
                 initialIsOpen={false}
                 position="bottom-right"

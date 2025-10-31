@@ -6,6 +6,15 @@ import { Nav } from './nav';
 import { navLinks } from './nav-links';
 import { useAuth } from '@/features/auth/use-auth';
 
+vi.mock('@/components/ui/tooltip', () => ({
+  Tooltip: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  TooltipContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  TooltipProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  TooltipTrigger: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
+
+vi.mock('@/features/auth/use-auth');
+
 const mockUser = (role: string) => ({
   id: '1',
   fullName: 'John Doe',
@@ -14,14 +23,14 @@ const mockUser = (role: string) => ({
   avatarUrl: '',
 });
 
-vi.mock('@/features/auth/use-auth');
-
 describe('Nav', () => {
-  it('renders all links for admin user', () => {
+  beforeEach(() => {
     vi.mocked(useAuth).mockReturnValue({
       user: mockUser('admin'),
     });
+  });
 
+  it('renders all links for admin user', () => {
     render(
       <MemoryRouter>
         <Nav isCollapsed={false} links={[...navLinks.top, ...navLinks.bottom]} />
@@ -61,4 +70,5 @@ describe('Nav', () => {
     expect(screen.getByText('Help & Support')).toBeInTheDocument();
   });
 });
+
 
