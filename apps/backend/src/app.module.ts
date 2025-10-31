@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { HealthController } from './health/health.controller';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ContextMiddleware } from './common/middleware/context.middleware';
 import { ContextModule } from './common/context/context.module';
 import { LoggerModule } from 'nestjs-pino';
@@ -17,10 +17,19 @@ import { DocumentsModule } from './documents/documents.module';
 import { FilingsModule } from './filings/filings.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
 import { CalendarModule } from './calendar/calendar.module';
+import { RedisModule } from 'nestjs-redis';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        host: configService.get<string>('REDIS_HOST'),
+        port: configService.get<number>('REDIS_PORT'),
+      }),
+      inject: [ConfigService],
+    }),
     ContextModule,
     LoggerModule.forRootAsync({
       imports: [ContextModule],

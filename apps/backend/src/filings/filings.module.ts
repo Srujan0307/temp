@@ -7,8 +7,10 @@ import { FilingStageService } from './filing-stage.service';
 import { KanbanController } from './kanban.controller';
 import { KanbanService } from './kanban.service';
 import { SlaService } from './sla.service';
+import { RedisModule } from 'nestjs-redis';
 
 @Module({
+  imports: [RedisModule],
   controllers: [FilingsController, FilingStageController, KanbanController],
   providers: [FilingsService, FilingStageService, KanbanService, SlaService],
 })
