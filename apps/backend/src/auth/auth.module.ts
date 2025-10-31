@@ -9,6 +9,7 @@ import { UsersModule } from '../users/users.module';
 import { TenancyModule } from '../tenancy/tenancy.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshToken } from './entities/refresh-token.entity';
+import { TokenBlacklistService } from './token-blacklist.service';
 
 @Module({
   imports: [
@@ -34,6 +35,8 @@ import { RefreshToken } from './entities/refresh-token.entity';
       provide: 'RefreshTokenModel',
       useValue: RefreshToken,
     },
+    TokenBlacklistService,
   ],
+  exports: [AuthService, TokenBlacklistService],
 })
 export class AuthModule {}

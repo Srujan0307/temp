@@ -8,9 +8,11 @@ import {
   Get,
   Delete,
   Query,
+  UsePipes,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { StorageService } from './storage.service';
+import { FileValidationPipe } from './file-validation.pipe';
 
 @Controller('storage')
 export class StorageController {
@@ -18,6 +20,7 @@ export class StorageController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
+  @UsePipes(FileValidationPipe)
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Query('tenantId') tenantId: string,
