@@ -1,35 +1,27 @@
-# Dependencies
-node_modules
-/apps/*/node_modules
-/packages/*/node_modules
-
-# Build artifacts
-dist
-/apps/*/dist
-/packages/*/dist
-.turbo
-coverage
-
 # Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
 
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+node_modules
+dist
+dist-ssr
+*.local
 
-# IDE settings
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
 .idea
-.vscode
+.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Vite
+.vite/
