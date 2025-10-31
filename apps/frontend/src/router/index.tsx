@@ -5,15 +5,15 @@ import {
 } from 'react-router-dom';
 
 import { AdminLayout } from '@/components/layouts/admin/admin-layout';
-import { AppLayout } from '@/components/layouts/app-layout';
 import { AuthLayout } from '@/components/layouts/auth-layout';
 import { ProtectedRoute } from '@/router/protected-route';
 import { DashboardRoute } from '@/routes/dashboard';
-import { LoginRoute } from '@/routes/login';
-import { SignupRoute } from '@/routes/signup';
+import { FilingsRoute } from '@/routes/filings';
 import { ForgotPasswordRoute } from '@/routes/forgot-password';
-import { ResetPasswordRoute } from '@/routes/reset-password';
+import { LoginRoute } from '@/routes/login';
 import { ProfileRoute } from '@/routes/profile';
+import { ResetPasswordRoute } from '@/routes/reset-password';
+import { SignupRoute } from '@/routes/signup';
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -36,7 +36,7 @@ export const router = createBrowserRouter(
           />
           <Route path="/billing" element={<Placeholder title="Billing" />} />
           <Route path="/clients" element={<Placeholder title="Clients" />} />
-          <Route path="/filings" element={<Placeholder title="Filings" />} />
+          <Route path="/filings" element={<FilingsRoute />} />
           <Route path="/calendar" element={<Placeholder title="Calendar" />} />
           <Route path="/users" element={<Placeholder title="Users" />} />
           <Route path="/settings" element={<Placeholder title="Settings" />} />
