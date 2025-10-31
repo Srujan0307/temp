@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/features/auth/use-auth';
+import { NotificationBell } from '@/features/notifications/components/NotificationBell';
 
 export const AppLayout = () => {
   const { logout } = useAuth();
@@ -18,6 +19,7 @@ export const AppLayout = () => {
             </span>
           </div>
           <div className="flex items-center gap-2">
+            <NotificationBell />
             <ThemeToggle />
             <Button variant="outline" onClick={logout}>
               Sign out
