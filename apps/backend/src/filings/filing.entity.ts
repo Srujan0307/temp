@@ -16,17 +16,17 @@ export enum SlaStatus {
 }
 
 export class Filing {
-  id: number;
-  tenant_id: number;
-  client_id: number;
-  vehicle_id: number;
-  type: string;
-  due_date: Date;
-  stage: FilingStage;
-  sla_status: SlaStatus;
-  assigned_to: number;
-  created_at: Date;
-  updated_at: Date;
+  id?: number;
+  tenant_id?: number;
+  client_id?: number;
+  vehicle_id?: number;
+  type?: string;
+  due_date?: Date;
+  stage?: FilingStage;
+  sla_status?: SlaStatus;
+  assigned_to?: number;
+  created_at?: Date;
+  updated_at?: Date;
   deleted_at?: Date;
 
   // Relations

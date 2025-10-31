@@ -17,6 +17,9 @@ import { DocumentsModule } from './documents/documents.module';
 import { FilingsModule } from './filings/filings.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
 import { CalendarModule } from './calendar/calendar.module';
+import { WorkflowsModule } from './workflows/workflows.module';
+import { WorkflowsService } from './src/workflows.service';
+import { WorkflowsController } from './src/workflows.controller';
 
 @Module({
   imports: [
@@ -49,13 +52,15 @@ import { CalendarModule } from './calendar/calendar.module';
     FilingsModule,
     VehiclesModule,
     CalendarModule,
+    WorkflowsModule,
   ],
-  controllers: [HealthController],
+  controllers: [HealthController, WorkflowsController],
   providers: [
     {
       provide: APP_GUARD,
       useClass: TenancyGuard,
     },
+    WorkflowsService,
   ],
 })
 export class AppModule implements NestModule {
