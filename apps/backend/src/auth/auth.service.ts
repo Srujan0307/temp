@@ -75,6 +75,12 @@ export class AuthService {
     return { message: 'Password changed successfully' };
   }
 
+  async getWsToken(user: User): Promise<any> {
+    const payload = { email: user.email, sub: user.id, tenantId: user.tenantId };
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '1m' });
+    return { accessToken };
+  }
+
   private async generateTokens(user: User, oldRefreshToken?: string) {
     const payload = { email: user.email, sub: user.id, tenantId: user.tenantId };
     const accessToken = this.jwtService.sign(payload);

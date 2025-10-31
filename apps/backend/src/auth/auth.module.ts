@@ -10,6 +10,8 @@ import { TenancyModule } from '../tenancy/tenancy.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshToken } from './entities/refresh-token.entity';
 
+import { WsJwtStrategy } from './strategies/ws-jwt.strategy';
+
 @Module({
   imports: [
     UsersModule,
@@ -30,6 +32,7 @@ import { RefreshToken } from './entities/refresh-token.entity';
   providers: [
     AuthService,
     JwtStrategy,
+    WsJwtStrategy,
     {
       provide: 'RefreshTokenModel',
       useValue: RefreshToken,
