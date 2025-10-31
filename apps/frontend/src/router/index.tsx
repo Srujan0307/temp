@@ -14,14 +14,7 @@ import { SignupRoute } from '@/routes/signup';
 import { ForgotPasswordRoute } from '@/routes/forgot-password';
 import { ResetPasswordRoute } from '@/routes/reset-password';
 import { ProfileRoute } from '@/routes/profile';
-
-function Placeholder({ title }: { title: string }) {
-  return (
-    <div>
-      <h1 className="text-2xl font-bold">{title}</h1>
-    </div>
-  );
-}
+import { ClientsRoute } from '@/routes/clients';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,15 +25,15 @@ export const router = createBrowserRouter(
           <Route path="/profile" element={<ProfileRoute />} />
           <Route
             path="/analytics"
-            element={<Placeholder title="Analytics" />}
+            element={<div>Analytics</div>}
           />
-          <Route path="/billing" element={<Placeholder title="Billing" />} />
-          <Route path="/clients" element={<Placeholder title="Clients" />} />
-          <Route path="/filings" element={<Placeholder title="Filings" />} />
-          <Route path="/calendar" element={<Placeholder title="Calendar" />} />
-          <Route path="/users" element={<Placeholder title="Users" />} />
-          <Route path="/settings" element={<Placeholder title="Settings" />} />
-          <Route path="/help" element={<Placeholder title="Help" />} />
+          <Route path="/billing" element={<div>Billing</div>} />
+          <Route path="/clients" element={<ClientsRoute />} />
+          <Route path="/filings" element={<div>Filings</div>} />
+          <Route path="/calendar" element={<div>Calendar</div>} />
+          <Route path="/users" element={<div>Users</div>} />
+          <Route path="/settings" element={<div>Settings</div>} />
+          <Route path="/help" element={<div>Help</div>} />
         </Route>
       </Route>
       <Route element={<AuthLayout />}>
