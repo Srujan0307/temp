@@ -10,6 +10,7 @@ import { ChangePasswordDto } from './dto/change-password.dto';
 import { RefreshToken } from './entities/refresh-token.entity';
 import { ModelClass } from 'objection';
 import { randomBytes } from 'crypto';
+import { TokenBlacklistService } from './token-blacklist.service';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly tenancyService: TenancyService,
     @Inject('RefreshTokenModel') private refreshTokenModel: ModelClass<RefreshToken>,
+    private readonly tokenBlacklistService: TokenBlacklistService,
   ) {}
 
   async login(email: string, pass: string): Promise<any> {
@@ -37,11 +39,13 @@ export class AuthService {
 
   async refreshToken(token: string): Promise<any> {
     const refreshToken = await this.refreshTokenModel.query().findOne({ token });
-    if (!refreshToken || refreshToken.isRevoked || new Date() > new Date(refreshToken.expiresAt)) {
-      if (refreshToken) {
-        await this.revokeRefreshTokenFamily(refreshToken);
-      }
+    if (!refreshToken || new Date() > new Date(refreshToken.expiresAt)) {
       throw new ForbiddenException('Invalid refresh token');
+    }
+
+    if (refreshToken.isRevoked) {
+      await this.revokeRefreshTokenFamily(refreshToken);
+      throw new ForbiddenException('Token reuse detected');
     }
 
     await this.refreshTokenModel.query().patchAndFetchById(refreshToken.id, { isRevoked: true });
@@ -54,7 +58,8 @@ export class AuthService {
     return this.generateTokens(user, refreshToken.token);
   }
 
-  async logout(userId: number): Promise<any> {
+  async logout(userId: number, token: string): Promise<any> {
+    this.tokenBlacklistService.addToBlacklist(token);
     await this.refreshTokenModel.query().where({ userId }).patch({ isRevoked: true });
     return { message: 'Logged out successfully' };
   }
